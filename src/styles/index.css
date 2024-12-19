@@ -1,0 +1,45 @@
+@import 'normalize.css';
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.4rem;
+  white-space: nowrap;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+.ant-layout {
+  height: 100%;
+  overflow: hidden;
+}
+
+header {
+  padding: 36px 12px 24px;
+  display: flex;
+  align-items: center;
+}
+
+header .col {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+}
+
+header .left {
+  flex: 1;
+}
