@@ -1,11 +1,13 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { AuthContext } from './context';
 import { IAuthContextValue } from './types';
 import { useMutation } from '@tanstack/react-query';
 import { authApi } from './api';
-import { TUserCredits } from '../user/types';
+import { IUser, TUserCredits } from '../user/types';
 import { appRoutes } from '../../shared/routes';
 import { useLocation, useNavigate } from 'react-router';
+import { appMessages } from '../../shared/messages';
+import { useMessage } from '../message/lib';
 
 interface IProps {
   children: ReactNode;
@@ -19,25 +21,42 @@ export function AuthContextProvider({ children, onStatusChange }: IProps) {
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const message = useMessage();
 
   const { mutate: authQuery } = useMutation({
     mutationFn: authApi.authenticate,
     mutationKey: ['authenticate'],
-    onSuccess: ({ data }) => setUser(data),
+    onSuccess: ({ data }) => {
+      /*message.success(appMessages.auth.authenticate.success);*/
+      setUser(data.data);
+    },
+    onError: () => {
+      /*void message.error(appMessages.auth.authenticate.fail);*/
+    },
   });
 
   const { mutate: loginQuery, isPending: loginPending } = useMutation({
     mutationFn: authApi.login,
     mutationKey: ['login'],
     onSuccess: ({ data }) => {
-      setUser(data);
+      setUser(data.data.user);
+      message.success(appMessages.auth.login.success);
+    },
+    onError: () => {
+      message.error(appMessages.auth.login.fail);
     },
   });
 
   const { mutate: logoutQuery, isPending: logoutPending } = useMutation({
     mutationFn: authApi.logout,
     mutationKey: ['logout'],
-    onSuccess: () => setUser(null),
+    onSuccess: () => {
+      setUser(null);
+      message.success(appMessages.auth.logout.success);
+    },
+    onError: () => {
+      message.error(appMessages.auth.logout.fail);
+    },
   });
 
   const auth = useCallback(authQuery, [authQuery]);
@@ -52,16 +71,14 @@ export function AuthContextProvider({ children, onStatusChange }: IProps) {
   const logout = useCallback(logoutQuery, [logoutQuery]);
 
   useEffect(() => {
-    !user && auth();
-  }, [user, auth]);
+    auth();
+  }, [auth]);
 
   useEffect(() => onStatusChange(!!user), [user, onStatusChange]);
 
   useEffect(() => {
-    if (
-      !nonProtectedRoutes.includes(pathname as (typeof nonProtectedRoutes)[number]) &&
-      !user
-    ) {
+    if (!nonProtectedRoutes.find((route) => pathname.includes(route)) && !user) {
+      console.log(pathname, nonProtectedRoutes);
       navigate(appRoutes.home);
     }
   }, [navigate, auth, pathname, user]);

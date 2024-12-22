@@ -1,31 +1,22 @@
 import { IHeaderProps } from '../shared/types';
 import { useAuth } from '../entities/auth/lib';
-import { Button, Input, theme } from 'antd';
+import { Button } from 'antd';
 import { useCallback, useState } from 'react';
-import { Filter, Search, User2 } from 'lucide-react';
+import { Plus, User2 } from 'lucide-react';
 import { LoginFormModal } from './login-form-modal';
 import { TUserCredits } from '../entities/user/types';
-import { RegistryFiltersDrawer } from './registry-filters-drawer';
+import { useSearchParams } from 'react-router';
 
-interface IProps<T extends object> extends IHeaderProps<T> {}
+interface IProps extends IHeaderProps {}
 
-export function RegistryHeader<T extends object>({ title, filters, search }: IProps<T>) {
+export function RegistryHeader({ title }: IProps) {
+  const [, setSearchParams] = useSearchParams();
   const { user, logout, login } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleFiltersButtonClick = useCallback(() => {
-    setIsFiltersModalOpen(() => true);
-  }, []);
-
-  const handleFiltersModalClose = useCallback(() => {
-    setIsFiltersModalOpen(() => false);
-  }, []);
-
-  const handleFiltersModalConfirm = useCallback((filters: any) => {
-    console.log(filters);
-  }, []);
+  const handleCreate = useCallback(() => {
+    setSearchParams(() => ({ create: 'true' }));
+  }, [setSearchParams]);
 
   const handleLoginButtonClick = useCallback(() => {
     if (user) {
@@ -50,26 +41,9 @@ export function RegistryHeader<T extends object>({ title, filters, search }: IPr
     <header>
       <div className="col left">
         <h1>{title}</h1>
-        {filters?.length && (
-          <Button
-            type={'text'}
-            icon={<Filter size={18} />}
-            onClick={handleFiltersButtonClick}
-          >
-            Отфильтровать
-          </Button>
-        )}
-        {search && (
-          <Input
-            variant={'borderless'}
-            prefix={
-              <Search color={theme.getDesignToken().colorTextPlaceholder} size={18} />
-            }
-            placeholder={'Поиск'}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        )}
+        <Button shape={'circle'} type={'primary'} onClick={handleCreate}>
+          <Plus size={30} color={'white'} />
+        </Button>
       </div>
 
       <div className="col right">
@@ -77,14 +51,6 @@ export function RegistryHeader<T extends object>({ title, filters, search }: IPr
           {user ? 'Выйти' : 'Войти'}
         </Button>
       </div>
-      {filters?.length && (
-        <RegistryFiltersDrawer
-          isOpen={isFiltersModalOpen}
-          onClose={handleFiltersModalClose}
-          onConfirm={handleFiltersModalConfirm}
-          filters={filters}
-        />
-      )}
       <LoginFormModal
         isOpen={isLoginModalOpen}
         onClose={handleLoginModalClose}

@@ -7,6 +7,7 @@ import { ConfigProvider, Layout } from 'antd';
 import { useState } from 'react';
 import { AuthContextProvider } from './entities/auth/provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MessageContextProvider } from './entities/message/provider';
 
 const queryClient = new QueryClient();
 
@@ -16,18 +17,20 @@ export function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <AuthContextProvider onStatusChange={setIsAuth}>
-          <ConfigProvider locale={ruRU}>
-            <Layout>
-              <Layout.Sider width={isAuth ? 280 : 0}>
-                <SidebarMenu />
-              </Layout.Sider>
-              <Layout style={{ padding: 12 }}>
-                <AppRouter />
+        <MessageContextProvider>
+          <AuthContextProvider onStatusChange={setIsAuth}>
+            <ConfigProvider locale={ruRU}>
+              <Layout>
+                <Layout.Sider width={isAuth ? 300 : 0}>
+                  <SidebarMenu />
+                </Layout.Sider>
+                <Layout style={{ padding: 12 }}>
+                  <AppRouter />
+                </Layout>
               </Layout>
-            </Layout>
-          </ConfigProvider>
-        </AuthContextProvider>
+            </ConfigProvider>
+          </AuthContextProvider>
+        </MessageContextProvider>
       </QueryClientProvider>
     </BrowserRouter>
   );

@@ -1,8 +1,8 @@
 import { Form, Input, Modal, Space } from 'antd';
 import { TUserCredits } from '../entities/user/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IFormItem } from '../shared/types';
-import { Messages } from '../shared/messages';
+import { IConfigFormItem } from '../shared/types';
+import { appMessages } from '../shared/messages';
 
 interface IProps {
   isOpen: boolean;
@@ -11,21 +11,21 @@ interface IProps {
   isLoading: boolean;
 }
 
-const loginFormConfig: IFormItem<TUserCredits>[] = [
+const loginFormConfig: IConfigFormItem<TUserCredits>[] = [
   {
     name: 'login',
     label: 'Логин',
     rules: [
-      { min: 5, message: Messages.validation.min(5) },
-      { required: true, message: Messages.validation.required },
+      { min: 5, message: appMessages.validation.min(5) },
+      { required: true, message: appMessages.validation.required },
     ],
   },
   {
     name: 'password',
     label: 'Пароль',
     rules: [
-      { min: 5, message: Messages.validation.min(5) },
-      { required: true, message: Messages.validation.required },
+      { min: 5, message: appMessages.validation.min(5) },
+      { required: true, message: appMessages.validation.required },
     ],
   },
 ];

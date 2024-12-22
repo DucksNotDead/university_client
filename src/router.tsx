@@ -3,6 +3,7 @@ import { IRoute } from './shared/types';
 import { appRoutes } from './shared/routes';
 import { Navigate } from 'react-router';
 import { RegistryView } from './views/registry-view';
+import { syllabusViewConfig } from './entities/syllabus/view-config';
 
 const routes: IRoute[] = [
   {
@@ -39,16 +40,7 @@ const routes: IRoute[] = [
   },
   {
     path: appRoutes.syllabuses,
-    component: (
-      <RegistryView
-        header={{
-          title: 'Учебные программы',
-          filters: [{ type: 'string', label: 'text', name: '' }],
-          search: (query) => {},
-        }}
-        table={{}}
-      />
-    ),
+    component: <RegistryView {...syllabusViewConfig} />,
   },
 ];
 
@@ -56,7 +48,11 @@ export function AppRouter() {
   return (
     <Routes>
       {routes.map((route) => (
-        <Route key={route.path} path={route.path} element={route.component} />
+        <Route
+          key={route.path as string}
+          path={route.path as string}
+          element={route.component}
+        />
       ))}
     </Routes>
   );
