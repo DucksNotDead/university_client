@@ -25,7 +25,15 @@ export const appMessages = {
   crud: {
     delete: {
       success: 'Удаление успешно',
-      fail: 'Ошибка удаления'
-    }
-  }
+      fail: 'Ошибка удаления',
+    },
+    create: {
+      success: 'Создание успешно',
+      fail: 'Ошибка создания',
+    },
+    update: {
+      success: 'Изменение успешно',
+      fail: 'Ошибка изменения',
+    },
+  },
 };

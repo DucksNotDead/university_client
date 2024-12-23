@@ -16,8 +16,8 @@ export function RegistryView<DataType extends IIdentifiable>(
   const [itemToDelete, setItemToDelete] = useState<DataType | null>(null);
 
   const { data: response, isPending } = useQuery({
-    queryKey: ['data'],
-    queryFn: props.getFn,
+    queryKey: [props.getFn[0]],
+    queryFn: props.getFn[1],
   });
 
   const handleDelete = useCallback(
@@ -35,28 +35,32 @@ export function RegistryView<DataType extends IIdentifiable>(
 
   useEffect(() => {
     setData(() => response?.data.data ?? []);
-    setRole(() => response?.data.role ?? null);
+    setRole(() => (response?.data.role ? Role[response.data.role] : null));
   }, [response]);
 
   return (
     <Space direction={'vertical'} className={'app-registry-view'}>
-      <RegistryHeader {...props.header} />
+      <RegistryHeader {...props.header} role={role} />
       <RegistryTable
         {...props.table}
         data={data ?? []}
         loading={isPending}
         onDelete={handleDelete}
+        role={role}
       />
       <RegistryItemModal
         items={data ?? []}
         role={role}
         entityTitle={props.entityTitle}
         formFields={props.formFields}
+        serviceEntityName={props.serviceEntityName}
+        getKey={props.getFn[0]}
       />
       <ConfirmDeleteModal
-        entityName={props.deleteEntityName}
+        entityName={props.serviceEntityName}
         itemToDelete={itemToDelete}
         onClose={handleDeleteModalClose}
+        getKey={props.getFn[0]}
       />
     </Space>
   );

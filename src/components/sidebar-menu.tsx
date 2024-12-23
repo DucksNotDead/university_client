@@ -4,14 +4,12 @@ import { useLocation, useNavigate } from 'react-router';
 import { useAuth } from '../entities/auth/lib';
 import { Role } from '../shared/roles';
 
-interface IProps {}
-
 const items: ItemType<MenuItemType>[] = [
   { key: '/departments', label: 'Кафедры' },
   { key: '/disciplines', label: 'Дисциплины' },
   { key: '/faculties', label: 'Факультеты' },
   { key: '/specialities', label: 'Специальности' },
-  { key: '/standards', label: 'Стандарты' },
+  { key: '/standard', label: 'Стандарты' },
   { key: '/study-plans', label: 'Учебные планы' },
   { key: '/syllabuses', label: 'Учебные программы' },
   { key: '/users', label: 'Пользователи' },
@@ -25,7 +23,7 @@ const ruRole: Record<Role, string> = {
   [Role.User]: 'Пользователь',
 };
 
-export function SidebarMenu(props: IProps) {
+export function SidebarMenu() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { user } = useAuth();

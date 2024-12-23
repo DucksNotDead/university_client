@@ -1,4 +1,4 @@
-import { IContent, IIdentifiable } from '../../shared/types';
+import { IIdentifiable } from '../../shared/types';
 
 export interface ISyllabusCommonInfo extends IIdentifiable {
   discipline_id: number;
@@ -7,16 +7,8 @@ export interface ISyllabusCommonInfo extends IIdentifiable {
 }
 
 export interface ISyllabus extends ISyllabusCommonInfo {
-  aims?: string;
-  competencies?: string;
-  requirements?: string;
-  position_in_scheme?: string;
-  contents?: string;
-  items: ISyllabus[];
+  aims: string;
+  competencies: string;
+  requirements: string;
+  position_in_scheme: string;
 }
-
-export interface ISyllabusExtended extends Omit<ISyllabus, 'contents'> {
-  contents: IContent[];
-}
-
-export interface ISyllabusFilterConfig extends Omit<ISyllabusCommonInfo, 'id'> {}

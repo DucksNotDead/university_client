@@ -7,15 +7,17 @@ import { useMessage } from '../entities/message/lib';
 import { appMessages } from '../shared/messages';
 
 interface IProps<DataType extends IIdentifiable> {
-  entityName: IViewConfig<DataType>['deleteEntityName'];
+  entityName: IViewConfig<DataType>['serviceEntityName'];
   itemToDelete: DataType | null;
   onClose: () => void;
+  getKey: string;
 }
 
 export function ConfirmDeleteModal<DataType extends IIdentifiable>({
   entityName,
   itemToDelete,
   onClose,
+  getKey,
 }: IProps<DataType>) {
   const { pathname } = useLocation();
   const queryClient = useQueryClient();
@@ -26,7 +28,7 @@ export function ConfirmDeleteModal<DataType extends IIdentifiable>({
     mutationFn: () => $api.delete(`${pathname}/${(itemToDelete as any).id}`),
     onSuccess: () => {
       message.success(appMessages.crud.delete.success);
-      void queryClient.invalidateQueries({ queryKey: ['data'] });
+      void queryClient.invalidateQueries({ queryKey: [getKey] });
     },
     onError: () => message.error(appMessages.crud.delete.fail),
     onSettled: () => onClose(),
@@ -34,7 +36,6 @@ export function ConfirmDeleteModal<DataType extends IIdentifiable>({
 
   return (
     <Modal
-      width={400}
       open={!!itemToDelete}
       onCancel={onClose}
       onClose={onClose}

@@ -1,13 +1,19 @@
 import { $api } from '../../shared/api';
-import { IPagination, IResponse } from '../../shared/types';
+import { IResponse, TGetQuery } from '../../shared/types';
 import { ISyllabus } from './types';
 
 const urls = {
   base: '/syllabuses',
 };
 
+const keys = {
+  get: 'get syllabuses',
+};
+
+async function get() {
+  return $api.get<IResponse<ISyllabus[]>>(urls.base);
+}
+
 export const syllabusApi = {
-  get() {
-    return $api.post<IResponse<ISyllabus[]>>(urls.base);
-  },
+  get: [keys.get, get] as TGetQuery<ISyllabus>,
 };

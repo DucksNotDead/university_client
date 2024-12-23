@@ -27,16 +27,27 @@ export interface IOption {
   label: string | number;
 }
 
+export type TSearchFn = (query: string) => Promise<IOption[]>;
+
+export type TGetQuery<DataType extends IIdentifiable> = [
+  string,
+  () => Promise<AxiosResponse<IResponse<DataType[]>>>,
+];
+
+export type TGetDictionaryQuery = [string, () => Promise<IOption[]>];
+
 export interface IConfigFormItem<T> {
   name: keyof T;
-  label: string;
-  rules: Rule[];
-  searchFn?: (query: string) => Promise<IOption[]>;
+  rules?: Rule[];
+  getFn?: TGetDictionaryQuery;
+  isTextarea?: boolean;
+  optional?: boolean;
 }
 
-export interface IInnerFormItem<T extends IIdentifiable> extends IConfigFormItem<T> {
-  value: string | number;
-}
+export type TApi<T extends IIdentifiable> = Record<
+  string,
+  TGetQuery<T> | TGetDictionaryQuery
+>;
 
 export interface IHeaderProps {
   title: string;
@@ -57,7 +68,7 @@ export interface ITableProps<DataType extends IIdentifiable> {
   columns: (setParams: TSetParamsFn) => IColumn<DataType>[];
   actions?: TTableActions;
   expandable?: {
-    props: Partial<Record<keyof DataType, string | undefined>>;
+    props: (keyof Omit<DataType, 'id'>)[];
     cond: ExpandableConfig<DataType>['rowExpandable'];
   };
 }
@@ -70,10 +81,10 @@ export interface IPagination {
 export interface IViewConfig<DataType extends IIdentifiable> {
   header: IHeaderProps;
   entityTitle: { key?: keyof DataType; prefix?: string };
-  deleteEntityName: string;
+  serviceEntityName: string;
   table: ITableProps<DataType>;
-  getFn: () => Promise<AxiosResponse<IResponse<DataType[]>>>;
-  formFields: IConfigFormItem<DataType>[];
+  getFn: TGetQuery<DataType>;
+  formFields: IConfigFormItem<Omit<DataType, 'id'>>[];
 }
 
 export interface IResponse<T> {

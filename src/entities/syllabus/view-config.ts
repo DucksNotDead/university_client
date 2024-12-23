@@ -2,13 +2,15 @@ import { IViewConfig } from '../../shared/types';
 import { ISyllabus } from './types';
 import { renderLink } from '../../shared/utils';
 import { syllabusApi } from './api';
+import { disciplineApi } from '../discipline/api';
+import { standardsApi } from '../standard/api';
 
 export const syllabusViewConfig: IViewConfig<ISyllabus> = {
   header: {
     title: 'Учебные программы',
   },
   entityTitle: { key: 'id', prefix: 'Учебная программа' },
-  deleteEntityName: 'учебную программу',
+  serviceEntityName: 'учебную программу',
   table: {
     columns: (setParams) => [
       { key: 'id', render: (value) => renderLink(value, setParams) },
@@ -25,14 +27,25 @@ export const syllabusViewConfig: IViewConfig<ISyllabus> = {
     actions: ['delete', 'print', 'edit'],
     expandable: {
       cond: () => true,
-      props: {
-        aims: 'Цели',
-        contents: 'Разделы',
-        competencies: 'Компетенции',
-        position_in_scheme: 'Место в программе',
-        requirements: 'Необходимые квалификации',
-      },
+      props: ['aims', 'competencies', 'position_in_scheme', 'requirements'],
     },
   },
   getFn: syllabusApi.get,
+  formFields: [
+    {
+      name: 'discipline_id',
+      getFn: disciplineApi.getDictionaries,
+    },
+    {
+      name: 'standard_id',
+      getFn: standardsApi.getDictionaries,
+    },
+    { name: 'aims', isTextarea: true },
+    { name: 'competencies', isTextarea: true },
+    { name: 'requirements', isTextarea: true },
+    {
+      name: 'position_in_scheme',
+      isTextarea: true,
+    },
+  ],
 };

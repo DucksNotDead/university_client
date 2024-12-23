@@ -14,7 +14,6 @@ interface IProps {
 const loginFormConfig: IConfigFormItem<TUserCredits>[] = [
   {
     name: 'login',
-    label: 'Логин',
     rules: [
       { min: 5, message: appMessages.validation.min(5) },
       { required: true, message: appMessages.validation.required },
@@ -22,7 +21,6 @@ const loginFormConfig: IConfigFormItem<TUserCredits>[] = [
   },
   {
     name: 'password',
-    label: 'Пароль',
     rules: [
       { min: 5, message: appMessages.validation.min(5) },
       { required: true, message: appMessages.validation.required },
@@ -90,7 +88,7 @@ export function LoginFormModal({ isOpen, onClose, onConfirm, isLoading }: IProps
         <Form form={form} layout="vertical">
           {loginFormConfig.map((item) => (
             <Form.Item key={item.name} {...item}>
-              <Input type={item.name === 'password' ? 'password' : 'text'} />
+              <Input placeholder={'Введите'} type={item.name === 'password' ? 'password' : 'text'} />
             </Form.Item>
           ))}
         </Form>

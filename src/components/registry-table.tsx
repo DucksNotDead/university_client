@@ -3,8 +3,9 @@ import { List, Table } from 'antd';
 import { useSearchParams } from 'react-router';
 import { useCallback, useMemo } from 'react';
 import { appDictionary } from '../shared/dictionary';
-import { renderActions } from '../shared/utils';
+import { renderActions, useRights } from '../shared/utils';
 import { ColumnsType } from 'antd/lib/table';
+import { Role } from '../shared/roles';
 
 const PAGE_SIZE = 10;
 
@@ -12,6 +13,7 @@ interface IProps<DataType extends IIdentifiable> extends ITableProps<DataType> {
   data: DataType[];
   loading: boolean;
   onDelete: (id: number) => void;
+  role: Role | null;
 }
 
 export function RegistryTable<DataType extends IIdentifiable>({
@@ -21,12 +23,17 @@ export function RegistryTable<DataType extends IIdentifiable>({
   actions,
   data,
   loading,
+  role,
 }: IProps<DataType>) {
   const [, setSearchParams] = useSearchParams();
+  const canChange = useRights(role);
 
-  const handleEdit = useCallback(() => {
-    setSearchParams(() => ({ edit: 'true' }));
-  }, [setSearchParams]);
+  const handleEdit = useCallback(
+    (id: number) => {
+      setSearchParams(() => ({ edit: 'true', id: id.toString() }));
+    },
+    [setSearchParams],
+  );
 
   const handlePrint = useCallback(() => {}, []);
 
@@ -45,9 +52,10 @@ export function RegistryTable<DataType extends IIdentifiable>({
               render: (_, record) => {
                 const id = (record as IIdentifiable).id;
                 return renderActions({
+                  canChange,
                   actions,
                   onPrint: () => handlePrint(),
-                  onEdit: () => handleEdit(),
+                  onEdit: () => handleEdit(id),
                   onDelete: () => onDelete(id),
                 });
               },
@@ -55,7 +63,7 @@ export function RegistryTable<DataType extends IIdentifiable>({
           ] as ColumnsType<DataType>)
         : []),
     ];
-  }, [setSearchParams, columns, actions, onDelete, handleEdit, handlePrint]);
+  }, [columns, actions, setSearchParams, canChange, handlePrint, handleEdit, onDelete]);
 
   return (
     <Table<DataType>
@@ -75,8 +83,8 @@ export function RegistryTable<DataType extends IIdentifiable>({
                 style={{ padding: '0 12px' }}
                 itemLayout={'horizontal'}
                 rowKey={'title'}
-                dataSource={Object.keys(expandable.props).map((propName) => ({
-                  title: (expandable.props as any)[propName] as string,
+                dataSource={expandable.props.map((propName) => ({
+                  title: appDictionary[propName as keyof typeof appDictionary],
                   value: (record[propName as keyof typeof record] ?? '') as string,
                 }))}
                 renderItem={({ title, value }) => (

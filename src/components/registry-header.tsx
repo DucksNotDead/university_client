@@ -6,13 +6,18 @@ import { Plus, User2 } from 'lucide-react';
 import { LoginFormModal } from './login-form-modal';
 import { TUserCredits } from '../entities/user/types';
 import { useSearchParams } from 'react-router';
+import { Role } from '../shared/roles';
+import { useRights } from '../shared/utils';
 
-interface IProps extends IHeaderProps {}
+interface IProps extends IHeaderProps {
+  role: Role | null;
+}
 
-export function RegistryHeader({ title }: IProps) {
+export function RegistryHeader({ title, role }: IProps) {
   const [, setSearchParams] = useSearchParams();
   const { user, logout, login } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const canCreate = useRights(role);
 
   const handleCreate = useCallback(() => {
     setSearchParams(() => ({ create: 'true' }));
@@ -41,9 +46,11 @@ export function RegistryHeader({ title }: IProps) {
     <header>
       <div className="col left">
         <h1>{title}</h1>
-        <Button shape={'circle'} type={'primary'} onClick={handleCreate}>
-          <Plus size={30} color={'white'} />
-        </Button>
+        {canCreate && (
+          <Button shape={'circle'} type={'primary'} onClick={handleCreate}>
+            <Plus size={30} color={'white'} />
+          </Button>
+        )}
       </div>
 
       <div className="col right">

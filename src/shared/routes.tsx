@@ -4,7 +4,7 @@ export const appRoutes = {
   disciplines: '/disciplines',
   faculties: '/faculties',
   specialities: '/specialities',
-  standards: '/standards',
+  standards: '/standard',
   studyPlans: '/study-plans',
   syllabuses: '/syllabuses',
   users: '/users',
