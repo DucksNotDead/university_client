@@ -2,25 +2,20 @@ import { List, Modal } from 'antd';
 import { useLocation, useSearchParams } from 'react-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { $api } from '../shared/api';
-import {
-  IIdentifiable,
-  IResponse,
-  IViewConfig,
-  TEntityWithTitle,
-  TFormMode,
-} from '../shared/types';
-import { Role } from '../shared/roles';
+import { IIdentifiable, IResponse, IViewConfig, TFormMode } from '../shared/types';
+import { ERole } from '../shared/roles';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateUpdateForm } from './create-update-form';
 import { useRights } from '../shared/utils';
 import { appMessages } from '../shared/messages';
 import { useMessage } from '../entities/message/lib';
 import { appDictionary } from '../shared/dictionary';
+import { appRouterRoutes } from '../router';
 
 interface IProps<T extends IIdentifiable>
   extends Pick<IViewConfig<T>, 'serviceEntityName' | 'entityTitle' | 'formFields'> {
   items: T[];
-  role: Role | null;
+  role: ERole | null;
   getKey: string;
 }
 
@@ -37,10 +32,13 @@ export function RegistryItemModal<T extends IIdentifiable>({
   const message = useMessage();
   const client = useQueryClient();
 
-  const [item, setItem] = useState<TEntityWithTitle<T> | null>(null);
+  const [item, setItem] = useState<T | null>(null);
+  const [externalEntityTitle, setExternalEntityTitle] = useState<
+    IViewConfig<T>['entityTitle'] | null
+  >(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [dataRole, setDataRole] = useState<Role | null>(null);
+  const [dataRole, setDataRole] = useState<ERole | null>(null);
   const [editValue, setEditValue] = useState(false);
   const [createValue, setCreateValue] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -63,9 +61,9 @@ export function RegistryItemModal<T extends IIdentifiable>({
     if (!item) {
       return '';
     }
-    const { key, prefix } = item.entityTitle;
+    const { key, prefix } = externalEntityTitle ?? entityTitle;
     return (prefix ?? '') + (key ? (key === 'id' ? ' ID = ' : ': ') + item[key] : '');
-  }, [isError, createValue, item, serviceEntityName]);
+  }, [isError, createValue, item, serviceEntityName, entityTitle, externalEntityTitle]);
 
   const { mutate } = useMutation({
     mutationKey: ['getItem'],
@@ -121,11 +119,13 @@ export function RegistryItemModal<T extends IIdentifiable>({
 
     if (!id && !createValue) {
       if (searchParams.size > 0) setSearchParams(() => ({}));
-      setIsOpen(() => false);
       setItem(() => null);
+      setExternalEntityTitle(() => null);
+      setIsOpen(() => false);
+      setIsLoading(() => false);
+      setDataRole(() => null);
       setEditValue(() => false);
       setCreateValue(() => false);
-      setDataRole(() => null);
       setIsError(() => false);
       return;
     }
@@ -143,21 +143,27 @@ export function RegistryItemModal<T extends IIdentifiable>({
 
     if (from) {
       mutate({ from, id });
+      setExternalEntityTitle(
+        () =>
+          appRouterRoutes.find((route) => route.path === `/${from}`)?.config
+            .entityTitle ?? (null as any),
+      );
     } else {
       setItem(() => {
         const candidate = items.find((item) => item.id === id);
         if (!candidate) {
           return null;
         } else {
-          return { ...candidate, entityTitle };
+          return candidate;
         }
       });
       setDataRole(() => role ?? null);
     }
-  }, [searchParams, pathname, items, role, mutate, entityTitle, setSearchParams]);
+  }, [searchParams, pathname, items, role, mutate, setSearchParams]);
 
   return (
     <Modal
+      destroyOnClose
       width={600}
       title={title}
       open={isOpen}

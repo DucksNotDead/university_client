@@ -67,11 +67,11 @@ export function CreateUpdateForm<T extends IIdentifiable>({
 
   return (
     <Form form={form} layout={'vertical'}>
-      {fields.map(({ name, rules, optional, isTextarea, getFn }) => (
+      {fields.map(({ name, label, rules, optional, isTextarea, getFn }) => (
         <Item
           key={name as string}
           name={name as string}
-          label={appDictionary[name as keyof typeof appDictionary]}
+          label={label ?? appDictionary[name as keyof typeof appDictionary]}
           rules={[
             ...(rules ?? []),
             ...(optional
@@ -89,9 +89,9 @@ export function CreateUpdateForm<T extends IIdentifiable>({
               value={form.getFieldValue([name] as any)}
             />
           ) : isTextarea ? (
-            <TextArea />
+            <TextArea placeholder={'Введите'}/>
           ) : (
-            <Input />
+            <Input placeholder={'Введите'}/>
           )}
         </Item>
       ))}

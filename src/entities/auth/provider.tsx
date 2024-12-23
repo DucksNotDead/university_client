@@ -1,13 +1,14 @@
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AuthContext } from './context';
 import { IAuthContextValue } from './types';
 import { useMutation } from '@tanstack/react-query';
 import { authApi } from './api';
-import { IUser, TUserCredits } from '../user/types';
+import { TUserCredits } from '../user/types';
 import { appRoutes } from '../../shared/routes';
 import { useLocation, useNavigate } from 'react-router';
 import { appMessages } from '../../shared/messages';
 import { useMessage } from '../message/lib';
+import { ERole } from '../../shared/roles';
 
 interface IProps {
   children: ReactNode;
@@ -74,7 +75,10 @@ export function AuthContextProvider({ children, onStatusChange }: IProps) {
     auth();
   }, [auth]);
 
-  useEffect(() => onStatusChange(!!user), [user, onStatusChange]);
+  useEffect(
+    () => onStatusChange(!!user && user.role !== ERole.User),
+    [user, onStatusChange],
+  );
 
   useEffect(() => {
     if (!nonProtectedRoutes.find((route) => pathname.includes(route)) && !user) {

@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react';
 import { appDictionary } from '../shared/dictionary';
 import { renderActions, useRights } from '../shared/utils';
 import { ColumnsType } from 'antd/lib/table';
-import { Role } from '../shared/roles';
+import { ERole } from '../shared/roles';
 
 const PAGE_SIZE = 10;
 
@@ -13,7 +13,7 @@ interface IProps<DataType extends IIdentifiable> extends ITableProps<DataType> {
   data: DataType[];
   loading: boolean;
   onDelete: (id: number) => void;
-  role: Role | null;
+  role: ERole | null;
 }
 
 export function RegistryTable<DataType extends IIdentifiable>({
@@ -44,7 +44,7 @@ export function RegistryTable<DataType extends IIdentifiable>({
         title: appDictionary[column.key as keyof typeof appDictionary] ?? column.key,
         render: column.render,
       })),
-      ...(actions?.length
+      ...(actions?.length && canChange
         ? ([
             {
               dataIndex: 'actions',

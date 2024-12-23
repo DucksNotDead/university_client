@@ -1,12 +1,12 @@
-import { JSX, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Rule } from 'antd/es/form';
 import { AxiosResponse } from 'axios';
 import { ExpandableConfig } from 'antd/es/table/interface';
-import { Role } from './roles';
+import { ERole } from './roles';
 
 export interface IRoute {
   path: string;
-  component: JSX.Element;
+  config: IViewConfig<any>;
 }
 
 export interface IIdentifiable {
@@ -42,6 +42,7 @@ export interface IConfigFormItem<T> {
   getFn?: TGetDictionaryQuery;
   isTextarea?: boolean;
   optional?: boolean;
+  label?: string;
 }
 
 export type TApi<T extends IIdentifiable> = Record<
@@ -91,7 +92,7 @@ export interface IResponse<T> {
   success: boolean;
   data: T;
   error: any;
-  role: Role;
+  role: ERole;
 }
 
 export type TEntityWithTitle<T extends IIdentifiable> = T & {

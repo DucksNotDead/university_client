@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Button, Space } from 'antd';
+import { Button, Space, Typography } from 'antd';
 import { appRoutes } from './routes';
 import { TSetParamsFn, TTableActions } from './types';
 import { Pencil, Printer, Trash } from 'lucide-react';
-import { Role } from './roles';
+import { ERole } from './roles';
 import { useAuth } from '../entities/auth/lib';
 
 export function useLog(...args: any[]) {
@@ -12,7 +12,7 @@ export function useLog(...args: any[]) {
   }, [args]);
 }
 
-type TRoleLike = Role | keyof typeof Role;
+type TRoleLike = ERole | keyof typeof ERole;
 
 export function useRights(needRole: TRoleLike | undefined | null) {
   const [result, setResult] = useState(false);
@@ -29,10 +29,10 @@ export function useRights(needRole: TRoleLike | undefined | null) {
     }
 
     const roleItem = (roleLike: TRoleLike | null | undefined) =>
-      typeof roleLike === 'string' ? Role[roleLike as keyof typeof Role] : roleLike;
+      typeof roleLike === 'string' ? ERole[roleLike as keyof typeof ERole] : roleLike;
 
     const userRoleItem = roleItem(userRole);
-    if (userRoleItem === Role.Admin) {
+    if (userRoleItem === ERole.Admin) {
       setResult(() => true);
       return;
     }
@@ -49,7 +49,7 @@ export function renderLink(
   registry?: keyof typeof appRoutes,
   name?: string,
 ) {
-  return (
+  return id ? (
     <Button
       type={'link'}
       onClick={() =>
@@ -58,6 +58,8 @@ export function renderLink(
     >
       {name ?? id}
     </Button>
+  ) : (
+    <Typography.Text type={'secondary'}>NULL</Typography.Text>
   );
 }
 

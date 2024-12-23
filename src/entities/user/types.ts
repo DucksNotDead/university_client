@@ -1,4 +1,4 @@
-import { Role } from '../../shared/roles';
+import { ERole } from '../../shared/roles';
 import { IDictionary, IIdentifiable } from '../../shared/types';
 
 interface IUserLogin {
@@ -11,8 +11,8 @@ interface IUserPassword {
 
 export interface IUser extends IDictionary {
   surname: string;
-  middlename?: string;
-  role: Role;
+  middlename: string | null;
+  role: ERole;
   department_id: number | null;
 }
 

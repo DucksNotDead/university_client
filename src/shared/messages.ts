@@ -1,12 +1,20 @@
+function localeSymbol(val: number) {
+  return val > 4 ? 'символов' : 'символа';
+}
+
 export const appMessages = {
   validation: {
+    len(val: number) {
+      return `${val} ${localeSymbol(val)}`;
+    },
     min(val: number) {
-      return `Минимум ${val} символов`;
+      return `Минимум ${this.len(val)}`;
     },
     max(val: number) {
-      return `Максимум ${val} символов`;
+      return `Максимум ${this.len(val)}`;
     },
     required: 'Поле обязательно для заполнения',
+    isNumber: 'Тут должно быть число',
   },
   auth: {
     authenticate: {

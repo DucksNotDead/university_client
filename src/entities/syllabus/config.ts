@@ -3,9 +3,9 @@ import { ISyllabus } from './types';
 import { renderLink } from '../../shared/utils';
 import { syllabusApi } from './api';
 import { disciplineApi } from '../discipline/api';
-import { standardsApi } from '../standard/api';
+import { standardApi } from '../standard/api';
 
-export const syllabusViewConfig: IViewConfig<ISyllabus> = {
+export const syllabusConfig: IViewConfig<ISyllabus> = {
   header: {
     title: 'Учебные программы',
   },
@@ -38,7 +38,7 @@ export const syllabusViewConfig: IViewConfig<ISyllabus> = {
     },
     {
       name: 'standard_id',
-      getFn: standardsApi.getDictionaries,
+      getFn: standardApi.getDictionaries,
     },
     { name: 'aims', isTextarea: true },
     { name: 'competencies', isTextarea: true },

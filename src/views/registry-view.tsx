@@ -5,14 +5,14 @@ import { RegistryTable } from '../components/registry-table';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { RegistryItemModal } from '../components/registry-item-modal';
-import { Role } from '../shared/roles';
+import { ERole } from '../shared/roles';
 import { ConfirmDeleteModal } from '../components/confirm-delete-modal';
 
 export function RegistryView<DataType extends IIdentifiable>(
   props: IViewConfig<DataType>,
 ) {
   const [data, setData] = useState<DataType[]>([]);
-  const [role, setRole] = useState<Role | null>(null);
+  const [role, setRole] = useState<ERole | null>(null);
   const [itemToDelete, setItemToDelete] = useState<DataType | null>(null);
 
   const { data: response, isPending } = useQuery({
@@ -35,7 +35,7 @@ export function RegistryView<DataType extends IIdentifiable>(
 
   useEffect(() => {
     setData(() => response?.data.data ?? []);
-    setRole(() => (response?.data.role ? Role[response.data.role] : null));
+    setRole(() => (response?.data.role ? ERole[response.data.role] : null));
   }, [response]);
 
   return (

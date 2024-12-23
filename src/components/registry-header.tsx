@@ -6,11 +6,11 @@ import { Plus, User2 } from 'lucide-react';
 import { LoginFormModal } from './login-form-modal';
 import { TUserCredits } from '../entities/user/types';
 import { useSearchParams } from 'react-router';
-import { Role } from '../shared/roles';
+import { ERole } from '../shared/roles';
 import { useRights } from '../shared/utils';
 
 interface IProps extends IHeaderProps {
-  role: Role | null;
+  role: ERole | null;
 }
 
 export function RegistryHeader({ title, role }: IProps) {
