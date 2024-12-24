@@ -12,7 +12,6 @@ interface ISyllabusBase {
 
 export type ISyllabus = IIdentifiable &
   ISyllabusBase & {
-    discipline_id: number;
     discipline_name: string;
     standard_id: number;
     approved: boolean;

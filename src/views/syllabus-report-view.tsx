@@ -53,7 +53,7 @@ export function SyllabusReportView({ item, className, onExport }: IProps) {
       onExport();
     }
     // eslint-disable-next-line
-  }, [ready, onExport]);
+  }, [ready]);
 
   return (
     <div className={className}>

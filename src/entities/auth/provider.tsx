@@ -81,11 +81,10 @@ export function AuthContextProvider({ children, onStatusChange }: IProps) {
   );
 
   useEffect(() => {
-    if (!nonProtectedRoutes.find((route) => pathname.includes(route)) && !user) {
-      console.log(pathname, nonProtectedRoutes);
+    if (!nonProtectedRoutes.find((route) => route === pathname) && !user) {
       navigate(appRoutes.home);
     }
-  }, [navigate, auth, pathname, user]);
+  }, [navigate, pathname, user]);
 
   return (
     <AuthContext.Provider
