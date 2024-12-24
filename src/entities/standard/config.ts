@@ -7,7 +7,7 @@ import { disciplineApi } from '../discipline/api';
 export const standardConfig: IViewConfig<IStandard> = {
   header: { title: 'Стандарты' },
   serviceEntityName: 'стандарт',
-  entityTitle: { key: 'id', prefix: 'Стандарты' },
+  entityTitle: { key: 'id', prefix: 'Стандарт' },
   getFn: standardApi.get,
   table: {
     columns: (setParams) => [

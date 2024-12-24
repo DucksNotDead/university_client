@@ -69,8 +69,13 @@ export function LoginFormModal({ isOpen, onClose, onConfirm, isLoading }: IProps
 
   useEffect(() => {
     window.addEventListener('keypress', handleEnter);
+
+    if (!isOpen) {
+      window.removeEventListener('keypress', handleEnter);
+    }
+
     return () => window.removeEventListener('keypress', handleEnter);
-  }, [handleEnter]);
+  }, [handleEnter, isOpen]);
 
   return (
     <Modal
@@ -88,7 +93,10 @@ export function LoginFormModal({ isOpen, onClose, onConfirm, isLoading }: IProps
         <Form form={form} layout="vertical">
           {loginFormConfig.map((item) => (
             <Form.Item key={item.name} {...item}>
-              <Input placeholder={'Введите'} type={item.name === 'password' ? 'password' : 'text'} />
+              <Input
+                placeholder={'Введите'}
+                type={item.name === 'password' ? 'password' : 'text'}
+              />
             </Form.Item>
           ))}
         </Form>

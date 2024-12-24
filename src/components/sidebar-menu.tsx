@@ -10,7 +10,7 @@ const items: ItemType<MenuItemType>[] = [
   { key: '/faculties', label: 'Факультеты' },
   { key: '/specialities', label: 'Специальности' },
   { key: '/academic-loads', label: 'Нагрузки' },
-  { key: '/standard', label: 'Стандарты' },
+  { key: '/standards', label: 'Стандарты' },
   { key: '/study-plans', label: 'Учебные планы' },
   { key: '/disciplines-in-study-plans', label: 'Дисциплины в учебном плане' },
   { key: '/syllabuses', label: 'Учебные программы' },

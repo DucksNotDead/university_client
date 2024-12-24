@@ -1,5 +1,5 @@
 import { ERole } from '../../shared/roles';
-import { IDictionary, IIdentifiable } from '../../shared/types';
+import { IIdentifiable } from '../../shared/types';
 
 interface IUserLogin {
   login: string;
@@ -9,11 +9,9 @@ interface IUserPassword {
   password: string;
 }
 
-export interface IUser extends IDictionary {
-  surname: string;
-  middlename: string | null;
+export interface IUser extends IIdentifiable {
+  fio: string;
   role: ERole;
-  department_id: number | null;
 }
 
 export type TUserCredits = IUserLogin & IUserPassword;

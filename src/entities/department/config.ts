@@ -4,7 +4,6 @@ import { departmentApi } from './api';
 import { renderLink } from '../../shared/utils';
 import { facultyApi } from '../faculty/api';
 import { userApi } from '../user/api';
-import { appMessages } from '../../shared/messages';
 
 export const departmentConfig: IViewConfig<IDepartment> = {
   header: { title: 'Кафедры' },
@@ -23,6 +22,6 @@ export const departmentConfig: IViewConfig<IDepartment> = {
   formFields: [
     { name: 'faculty_id', getFn: facultyApi.getDictionaries },
     { name: 'head_id', getFn: userApi.getDictionaries },
-    { name: 'name', rules: [{ min: 5, message: appMessages.validation.min(5) }] },
+    { name: 'name' },
   ],
 };

@@ -44,4 +44,5 @@ export const appMessages = {
       fail: 'Ошибка изменения',
     },
   },
+
 };

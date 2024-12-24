@@ -4,7 +4,7 @@ import {
   TFormMode,
   TGetDictionaryQuery,
 } from '../shared/types';
-import { Button, Form, Input, Select, Space } from 'antd';
+import { Button, Form, Input, InputNumber, Select, Space } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import TextArea from 'antd/es/input/TextArea';
 import { Rule } from 'antd/es/form';
@@ -89,9 +89,11 @@ export function CreateUpdateForm<T extends IIdentifiable>({
               value={form.getFieldValue([name] as any)}
             />
           ) : isTextarea ? (
-            <TextArea placeholder={'Введите'}/>
+            <TextArea placeholder={'Введите'} />
+          ) : rules?.find((rule) => (rule as any).type === 'number') ? (
+            <InputNumber placeholder={'Введите'} />
           ) : (
-            <Input placeholder={'Введите'}/>
+            <Input placeholder={'Введите'} />
           )}
         </Item>
       ))}

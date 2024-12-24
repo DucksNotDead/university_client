@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Button, Space, Typography } from 'antd';
+import { Button, Space, theme, Typography } from 'antd';
 import { appRoutes } from './routes';
 import { TSetParamsFn, TTableActions } from './types';
-import { Pencil, Printer, Trash } from 'lucide-react';
+import { Pencil, Printer, Trash, UserRoundCheck } from 'lucide-react';
 import { ERole } from './roles';
 import { useAuth } from '../entities/auth/lib';
 
@@ -63,21 +63,38 @@ export function renderLink(
   );
 }
 
+export function renderYear(value: any) {
+  return (
+    <Typography.Text type={'secondary'}>
+      {value} - {value + 1}
+    </Typography.Text>
+  );
+}
+
 export function renderActions({
   canChange,
+  canApprove,
   actions,
   onDelete,
   onEdit,
   onPrint,
+  onApprove,
 }: {
   canChange: boolean;
+  canApprove: boolean;
   actions: TTableActions;
   onEdit: () => void;
   onPrint: () => void;
   onDelete: () => void;
+  onApprove: () => void;
 }) {
   return (
     <Space>
+      {actions.includes('approve') && canApprove && (
+        <Button type={'text'} onClick={onApprove}>
+          <UserRoundCheck color={theme.defaultConfig.token.colorPrimary} />
+        </Button>
+      )}
       {actions.includes('delete') && canChange && (
         <Button type={'text'} onClick={onDelete}>
           <Trash color={'red'} />

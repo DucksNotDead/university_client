@@ -33,8 +33,6 @@ export const academicLoadConfig: IViewConfig<IAcademicLoad> = {
       name: 'volume',
       rules: [
         { type: 'number', message: appMessages.validation.isNumber },
-        { min: 1, message: appMessages.validation.min(1) },
-        { max: 3, message: appMessages.validation.max(3) },
       ],
     },
   ],

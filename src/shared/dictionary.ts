@@ -4,10 +4,9 @@ export const appDictionary = {
 
   id: 'ID',
   name: 'Название',
-
-  surname: 'Фамилия',
-  middlename: 'Отчество',
+  fio: 'ФИО',
   role: 'Роль',
+  type: 'Вид учебной работы',
 
   department_id: 'Кафедра',
   discipline_name: 'Название дисциплины',
@@ -29,5 +28,6 @@ export const appDictionary = {
   year: 'Год',
   semester: 'Семестр',
   hours: 'Часы',
-  type: 'Вид учебной работы'
+  total_hours: 'Всего часов',
+  confirmed: 'Подтверждена'
 } as const;

@@ -31,7 +31,6 @@ export const studyPlanConfig: IViewConfig<IStudyPlan> = {
       name: 'year',
       rules: [
         { type: 'number', message: appMessages.validation.isNumber },
-        { len: 4, message: appMessages.validation.len(4) },
       ],
     },
     { name: 'description', isTextarea: true },

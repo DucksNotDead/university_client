@@ -36,13 +36,12 @@ export const disciplineInStudyPlanConfig: IViewConfig<IDisciplineInStudyPlan> = 
       name: 'semester',
       rules: [
         { type: 'number', message: appMessages.validation.isNumber },
-        { len: 1, message: appMessages.validation.len(1) },
       ],
     },
     {
       name: 'type',
       getFn: [
-        'get study plans',
+        'get study types',
         async () =>
           Object.keys(ruStudyTypes).map(
             (studyType) =>
@@ -57,7 +56,6 @@ export const disciplineInStudyPlanConfig: IViewConfig<IDisciplineInStudyPlan> = 
       name: 'hours',
       rules: [
         { type: 'number', message: appMessages.validation.isNumber },
-        { max: 3, message: appMessages.validation.max(3) },
       ],
     },
   ],

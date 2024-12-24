@@ -3,7 +3,6 @@ import { IUser } from './types';
 import { userApi } from './api';
 import { renderLink } from '../../shared/utils';
 import { createRoles, ERole, ruRole } from '../../shared/roles';
-import { departmentApi } from '../department/api';
 import { stringRules } from '../../shared/common';
 
 export const userConfig: IViewConfig<IUser> = {
@@ -14,24 +13,13 @@ export const userConfig: IViewConfig<IUser> = {
   table: {
     columns: (setParams) => [
       { key: 'id', render: (value) => renderLink(value, setParams) },
-      {
-        key: 'surname',
-        render: (_, record) =>
-          `${record.surname} ${record.name} ${record.middlename ?? ''}`,
-      },
-      {
-        key: 'department_id',
-        render: (value) => renderLink(value, setParams, 'departments'),
-      },
+      { key: 'fio' },
       { key: 'role', render: (value) => ruRole[value as ERole] },
     ],
     actions: ['edit', 'delete'],
   },
   formFields: [
-    { name: 'surname', rules: stringRules },
-    { name: 'name', rules: stringRules, label: 'Имя' },
-    { name: 'middlename', rules: stringRules, optional: true },
-    { name: 'department_id', getFn: departmentApi.getDictionaries },
+    { name: 'fio', rules: stringRules },
     {
       name: 'role',
       getFn: [

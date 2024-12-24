@@ -1,6 +1,6 @@
 import { IViewConfig } from '../../shared/types';
 import { ISyllabus } from './types';
-import { renderLink } from '../../shared/utils';
+import { renderLink, renderYear } from '../../shared/utils';
 import { syllabusApi } from './api';
 import { disciplineApi } from '../discipline/api';
 import { standardApi } from '../standard/api';
@@ -22,6 +22,10 @@ export const syllabusConfig: IViewConfig<ISyllabus> = {
       {
         key: 'standard_id',
         render: (value) => renderLink(value, setParams, 'standards'),
+      },
+      {
+        key: 'year',
+        render: renderYear,
       },
     ],
     actions: ['delete', 'print', 'edit'],

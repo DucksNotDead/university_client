@@ -59,7 +59,7 @@ export interface IColumn<DataType> {
   render?: (value: DataType[keyof DataType], row: DataType) => ReactNode;
 }
 
-export type TTableActions = ('edit' | 'delete' | 'print')[];
+export type TTableActions = ('edit' | 'delete' | 'print' | 'approve')[];
 
 export type TSetParamsFn = (params: Record<string, any>) => void;
 
@@ -86,6 +86,7 @@ export interface IViewConfig<DataType extends IIdentifiable> {
   table: ITableProps<DataType>;
   getFn: TGetQuery<DataType>;
   formFields: IConfigFormItem<Omit<DataType, 'id'>>[];
+  showList?: Record<keyof DataType, string>
 }
 
 export interface IResponse<T> {

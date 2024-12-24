@@ -18,8 +18,8 @@ async function get() {
 async function getDict() {
   try {
     const res = await get();
-    return res.data.data.map(({ name, middlename, surname, role, id }) => ({
-      label: `${name} ${middlename ?? ''} ${surname} (${ruRole[role]})`,
+    return res.data.data.map(({ fio, role, id }) => ({
+      label: `${fio} (${ruRole[role]})`,
       value: id,
     }));
   } catch {

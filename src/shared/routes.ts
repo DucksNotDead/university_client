@@ -6,7 +6,7 @@ export const appRoutes = {
   faculties: '/faculties',
   specialities: '/specialities',
   academicLoads: '/academic-loads',
-  standards: '/standard',
+  standards: '/standards',
   studyPlans: '/study-plans',
   syllabuses: '/syllabuses',
   users: '/users',

@@ -32,6 +32,7 @@ export const appRouterRoutes: IRoute[] = [
 export function AppRouter() {
   const location = useLocation();
   const nodeRef = useRef(null);
+
   return (
     <Routes location={location}>
       {appRouterRoutes.map((route) => (

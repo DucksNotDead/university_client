@@ -6,18 +6,23 @@ import { appDictionary } from '../shared/dictionary';
 import { renderActions, useRights } from '../shared/utils';
 import { ColumnsType } from 'antd/lib/table';
 import { ERole } from '../shared/roles';
+import { useAuth } from '../entities/auth/lib';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 interface IProps<DataType extends IIdentifiable> extends ITableProps<DataType> {
   data: DataType[];
   loading: boolean;
   onDelete: (id: number) => void;
+  onApprove: (id: number) => void;
+  onPrint: (id: number) => void;
   role: ERole | null;
 }
 
 export function RegistryTable<DataType extends IIdentifiable>({
   onDelete,
+  onApprove,
+  onPrint,
   expandable,
   columns,
   actions,
@@ -27,6 +32,7 @@ export function RegistryTable<DataType extends IIdentifiable>({
 }: IProps<DataType>) {
   const [, setSearchParams] = useSearchParams();
   const canChange = useRights(role);
+  const { user } = useAuth();
 
   const handleEdit = useCallback(
     (id: number) => {
@@ -35,8 +41,6 @@ export function RegistryTable<DataType extends IIdentifiable>({
     [setSearchParams],
   );
 
-  const handlePrint = useCallback(() => {}, []);
-
   const columnsMapped = useMemo<ColumnsType<DataType>>(() => {
     return [
       ...columns((params) => setSearchParams(() => params)).map((column) => ({
@@ -44,7 +48,7 @@ export function RegistryTable<DataType extends IIdentifiable>({
         title: appDictionary[column.key as keyof typeof appDictionary] ?? column.key,
         render: column.render,
       })),
-      ...(actions?.length && canChange
+      ...(actions?.length
         ? ([
             {
               dataIndex: 'actions',
@@ -54,7 +58,11 @@ export function RegistryTable<DataType extends IIdentifiable>({
                 return renderActions({
                   canChange,
                   actions,
-                  onPrint: () => handlePrint(),
+                  canApprove:
+                    !(record as any).approved &&
+                    (record as any).department_head_id === user?.id,
+                  onApprove: () => onApprove(id),
+                  onPrint: () => onPrint(id),
                   onEdit: () => handleEdit(id),
                   onDelete: () => onDelete(id),
                 });
@@ -63,7 +71,7 @@ export function RegistryTable<DataType extends IIdentifiable>({
           ] as ColumnsType<DataType>)
         : []),
     ];
-  }, [columns, actions, setSearchParams, canChange, handlePrint, handleEdit, onDelete]);
+  }, [columns, actions, setSearchParams, canChange, user?.id, onApprove, onPrint, handleEdit, onDelete]);
 
   return (
     <Table<DataType>
